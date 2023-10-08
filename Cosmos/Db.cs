@@ -10,6 +10,9 @@ public class CosmosDbContext : DbContext
 
     public DbSet<Template> Templates => Set<Template>();
 
+    public DbSet<Workflow> Workflows => Set<Workflow>();
+
+
     public CosmosDbContext(DbContextOptions<CosmosDbContext> options) : base(options)
     {}
     
@@ -22,6 +25,10 @@ public class CosmosDbContext : DbContext
 
         modelBuilder.Entity<Template>() 
             .ToContainer("Templates")
+            .HasPartitionKey(p => p.Id);
+
+        modelBuilder.Entity<Workflow>() 
+            .ToContainer("Workflows")
             .HasPartitionKey(p => p.Id);
         
         base.OnModelCreating(modelBuilder);

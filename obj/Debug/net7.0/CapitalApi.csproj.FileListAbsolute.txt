@@ -3,6 +3,8 @@ C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\CapitalApi.deps.json
 C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\CapitalApi.runtimeconfig.json
 C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\CapitalApi.dll
 C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\CapitalApi.pdb
+C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\Azure.Core.dll
 C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\Microsoft.AspNetCore.JsonPatch.dll
 C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
@@ -45,5 +47,3 @@ C:\Users\SonOfMan\Desktop\CapitalApi\obj\Debug\net7.0\refint\CapitalApi.dll
 C:\Users\SonOfMan\Desktop\CapitalApi\obj\Debug\net7.0\CapitalApi.pdb
 C:\Users\SonOfMan\Desktop\CapitalApi\obj\Debug\net7.0\CapitalApi.genruntimeconfig.cache
 C:\Users\SonOfMan\Desktop\CapitalApi\obj\Debug\net7.0\ref\CapitalApi.dll
-C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\AutoMapper.dll
-C:\Users\SonOfMan\Desktop\CapitalApi\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

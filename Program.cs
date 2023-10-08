@@ -8,6 +8,7 @@ using AutoMapper;
 using CapitalApi.Dto;
 using Microsoft.AspNetCore.Http;
 using CapitalApi.Models;
+using Microsoft.AspNetCore.Mvc;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -162,5 +163,26 @@ app.MapPut("api/templates/{id:guid}",
 
         return Results.Ok();
 });
+
+app.MapGet("api/workflows", async ([FromServices] IWorkflowRepository repository) =>
+{
+    var workflows = await repository.GetWorkflowsForStagesAsync();
+    return Results.Ok(workflows);
+}).Produces<List<WorkflowDTO>>();
+
+
+
+app.MapPut("api/workflows/{id}/{newStage}", async ([FromServices]Guid id, WorkflowStage newStage, IWorkflowRepository repository) =>
+    {
+        var success = await repository.UpdateWorkflowStageAsync(id, newStage);
+        if (success)
+        {
+            return Results.Ok("Workflow stage updated successfully.");
+        }
+        else
+        {
+            return Results.NotFound("Workflow not found.");
+        }
+    });
     
 app.Run();
