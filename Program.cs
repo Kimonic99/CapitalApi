@@ -1,26 +1,30 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using CapitalApi.Cosmos;
+﻿using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using CapitalApi.Cosmos;
+using CapitalApi.Models;
+using CapitalApi.Dto;
 using CapitalApi.Repositories;
 using AutoMapper;
-using CapitalApi.Dto;
-using Microsoft.AspNetCore.Http;
-using CapitalApi.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Builder;
 
 
 var builder = WebApplication.CreateBuilder(args);
-    
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-     c.SwaggerDoc("v1", new OpenApiInfo {
-         Title = "Capital Placement Minimal API",
-         Description = "Making the in house tools you love",
-         Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Capital Placement Minimal API",
+        Description = "Making the in house tools you love",
+        Version = "v1"
+    });
 });
+
 
 builder.Services.AddDbContext<CosmosDbContext>(opt =>
 {
@@ -61,31 +65,33 @@ builder.Services.AddDbContext<CosmosDbContext>(opt =>
 });
 
 
+
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
 builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+builder.Services.AddScoped<IWorkflowRepository, WorkflowRepository>();
+builder.Services.AddScoped<IPreviewRepository, PreviewRepository>();
 
 
 
 var app = builder.Build();
-    
+
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-   c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minimal API V1");
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Minimal API V1");
 });
 
 app.UseHttpsRedirection();
 
-// Automatically create db on POST
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<CosmosDbContext>();
     dbContext.Database.EnsureCreated();
 }
 
-
-    
 app.MapGet("api/programs", async (IProgramRepository repository, IMapper mapper) =>
 {
     var programModels = await repository.GetAllAsync();
@@ -128,7 +134,7 @@ app.MapPut("api/programs/{id:guid}",
         await repository.UpdateAsync(command);
 
         return Results.Ok();
-});
+    });
 
 app.MapGet("api/templates", async (ITemplateRepository repository, IMapper mapper) =>
 {
@@ -162,7 +168,7 @@ app.MapPut("api/templates/{id:guid}",
         await repository.UpdateAsync(command);
 
         return Results.Ok();
-});
+    });
 
 app.MapGet("api/workflows", async ([FromServices] IWorkflowRepository repository) =>
 {
@@ -172,7 +178,7 @@ app.MapGet("api/workflows", async ([FromServices] IWorkflowRepository repository
 
 
 
-app.MapPut("api/workflows/{id}/{newStage}", async ([FromServices]Guid id, WorkflowStage newStage, IWorkflowRepository repository) =>
+app.MapPut("api/workflows/{id}/{newStage}", async ([FromServices] Guid id, WorkflowStage newStage, IWorkflowRepository repository) =>
     {
         var success = await repository.UpdateWorkflowStageAsync(id, newStage);
         if (success)
@@ -184,5 +190,18 @@ app.MapPut("api/workflows/{id}/{newStage}", async ([FromServices]Guid id, Workfl
             return Results.NotFound("Workflow not found.");
         }
     });
-    
+
+app.MapGet("/api/preview", async (IPreviewRepository repository) =>
+{
+    var previewData = await repository.GetPreviewDataAsync();
+
+    if (previewData == null)
+    {
+        return Results.NotFound("Preview data not found.");
+    }
+
+    return Results.Ok(previewData);
+});
+
+
 app.Run();
