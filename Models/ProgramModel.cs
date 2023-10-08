@@ -4,7 +4,24 @@ namespace CapitalApi.Models;
 public class ProgramModel
 {
     public Guid Id { get; set; } // Unique program identifier
-    public string? ProgramTitle { get; set; }
+    private string? programTitle;
+
+    public string? ProgramTitle
+    {
+        get => programTitle;
+        set
+        {
+            // Trim the input and check if it's empty or whitespace
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                programTitle = null;
+            }
+            else
+            {
+                programTitle = value;
+            }
+        }
+    }
     public string? Summary { get; set; }
     public string? ProgramDescription { get; set; }
     public string? SkillsRequired { get; set; }
