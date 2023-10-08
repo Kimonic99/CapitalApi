@@ -7,6 +7,9 @@ public class CosmosDbContext : DbContext
     
     
     public DbSet<ProgramModel> ProgramModels => Set<ProgramModel>();
+
+    public DbSet<Template> Templates => Set<Template>();
+
     public CosmosDbContext(DbContextOptions<CosmosDbContext> options) : base(options)
     {}
     
@@ -15,6 +18,10 @@ public class CosmosDbContext : DbContext
     {
         modelBuilder.Entity<ProgramModel>()
             .ToContainer("ProgramModels")
+            .HasPartitionKey(p => p.Id);
+
+        modelBuilder.Entity<Template>() 
+            .ToContainer("Templates")
             .HasPartitionKey(p => p.Id);
         
         base.OnModelCreating(modelBuilder);

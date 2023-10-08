@@ -62,6 +62,8 @@ builder.Services.AddDbContext<CosmosDbContext>(opt =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProgramRepository, ProgramRepository>();
+builder.Services.AddScoped<ITemplateRepository, TemplateRepository>();
+
 
 
 var app = builder.Build();
@@ -127,5 +129,38 @@ app.MapPut("api/programs/{id:guid}",
         return Results.Ok();
 });
 
+app.MapGet("api/templates", async (ITemplateRepository repository, IMapper mapper) =>
+{
+    var templates = await repository.GetAllAsync();
+    return Results.Ok(templates);
+});
+
+app.MapGet("api/templates/{id:guid}", async (ITemplateRepository repository, IMapper mapper, Guid id) =>
+{
+    var template = await repository.GetByIdAsync(id);
+
+    if (template != null)
+    {
+        return Results.Ok(template);
+    }
+
+    return Results.NotFound();
+});
+
+app.MapPut("api/templates/{id:guid}",
+    async (ITemplateRepository repository, IMapper mapper, Guid id, TemplateDTO cmdUpdateDto) =>
+    {
+        var command = await repository.GetByIdAsync(id);
+        if (command == null)
+        {
+            return Results.NotFound();
+        }
+
+        mapper.Map(cmdUpdateDto, command);
+
+        await repository.UpdateAsync(command);
+
+        return Results.Ok();
+});
     
 app.Run();
