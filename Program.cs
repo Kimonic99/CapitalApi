@@ -92,11 +92,11 @@ using (var scope = app.Services.CreateScope())
     dbContext.Database.EnsureCreated();
 }
 
-app.MapGet("api/programs", async (IProgramRepository repository, IMapper mapper) =>
-{
-    var programModels = await repository.GetAllAsync();
-    return Results.Ok(mapper.Map<IEnumerable<ProgramDTO>>(programModels));
-});
+// app.MapGet("api/programs", async (IProgramRepository repository, IMapper mapper) =>
+// {
+//     var programModels = await repository.GetAllAsync();
+//     return Results.Ok(mapper.Map<IEnumerable<ProgramDTO>>(programModels));
+// });
 
 app.MapGet("api/programs/{id:guid}", async (IProgramRepository repository, IMapper mapper, Guid id) =>
 {
@@ -136,11 +136,11 @@ app.MapPut("api/programs/{id:guid}",
         return Results.Ok();
     });
 
-app.MapGet("api/templates", async (ITemplateRepository repository, IMapper mapper) =>
-{
-    var templates = await repository.GetAllAsync();
-    return Results.Ok(templates);
-});
+// app.MapGet("api/templates", async (ITemplateRepository repository, IMapper mapper) =>
+// {
+//     var templates = await repository.GetAllAsync();
+//     return Results.Ok(templates);
+// });
 
 app.MapGet("api/templates/{id:guid}", async (ITemplateRepository repository, IMapper mapper, Guid id) =>
 {
